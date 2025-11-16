@@ -1,0 +1,10 @@
+title: "Analysis Methods"
+description: "Learn systematic techniques for analyzing complex circuits"
+order: 2
+icon: "🔍"
+color: "#3b82f6"
+prerequisites:
+  - "01-fundamentals"
+estimatedTime: "2 hours"
+difficulty: "intermediate"
+

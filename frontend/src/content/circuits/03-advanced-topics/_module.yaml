@@ -1,0 +1,11 @@
+title: "Advanced Topics"
+description: "Explore advanced circuit analysis and visualization techniques"
+order: 3
+icon: "🚀"
+color: "#a855f7"
+prerequisites:
+  - "01-fundamentals"
+  - "02-analysis-methods"
+estimatedTime: "1 hour"
+difficulty: "advanced"
+

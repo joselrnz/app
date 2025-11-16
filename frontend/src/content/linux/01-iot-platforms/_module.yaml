@@ -1,0 +1,9 @@
+title: "IoT Platforms"
+description: "Build and deploy IoT platforms with MQTT, Node-RED, and time-series databases"
+order: 1
+icon: "Cpu"
+color: "emerald"
+prerequisites: []
+estimatedTime: "2 hours"
+difficulty: "intermediate"
+

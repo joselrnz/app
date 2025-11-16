@@ -1,0 +1,125 @@
+.sidebar {
+  width: 240px;
+  height: 100%;
+  background-color: var(--gh-bg-secondary);
+  border-right: 1px solid var(--gh-border);
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.collapsed {
+  width: 60px;
+}
+
+.sidebarHeader {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--gh-border);
+}
+
+.logoContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  width: 32px;
+  height: 32px;
+  background-color: var(--gh-link);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.logoText {
+  font-weight: 600;
+  color: var(--gh-text);
+}
+
+.collapseButton {
+  background: none;
+  border: none;
+  color: var(--gh-text-secondary);
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.collapseButton:hover {
+  background-color: var(--gh-bg-hover);
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+.navigation {
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navItem {
+  margin-bottom: 0.25rem;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  text-align: left;
+  color: var(--gh-text-secondary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.navButton:hover {
+  background-color: var(--gh-bg-hover);
+  color: var(--gh-text);
+}
+
+.navButton.active {
+  background-color: var(--gh-bg-hover);
+  color: var(--gh-link);
+  font-weight: 500;
+}
+
+.sidebarFooter {
+  padding: 1rem;
+  border-top: 1px solid var(--gh-border);
+}
+
+.socialLinks {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.socialLink {
+  color: var(--gh-text-secondary);
+  transition: color 0.2s;
+}
+
+.socialLink:hover {
+  color: var(--gh-link);
+}

@@ -1,0 +1,58 @@
+{
+  "modules": {
+    "led_circuit": {
+      "ports": {
+        "Vcc": {
+          "direction": "input",
+          "bits": [
+            2
+          ]
+        },
+        "GND": {
+          "direction": "input",
+          "bits": [
+            4
+          ]
+        }
+      },
+      "cells": {
+        "R1": {
+          "type": "r_v",
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          },
+          "connections": {
+            "A": [
+              2
+            ],
+            "B": [
+              5
+            ]
+          },
+          "attributes": {
+            "value": "220\u03a9"
+          }
+        },
+        "LED1": {
+          "type": "d_v",
+          "port_directions": {
+            "A": "input",
+            "C": "output"
+          },
+          "connections": {
+            "A": [
+              5
+            ],
+            "C": [
+              4
+            ]
+          },
+          "attributes": {
+            "type": "LED"
+          }
+        }
+      }
+    }
+  }
+}

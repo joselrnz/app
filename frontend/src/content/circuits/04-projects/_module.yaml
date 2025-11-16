@@ -1,0 +1,10 @@
+title: "Hands-On Projects"
+description: "Build real-world circuits with Arduino and ESP32"
+order: 4
+icon: "💡"
+color: "#fbbf24"
+prerequisites:
+  - "01-fundamentals"
+estimatedTime: "2+ hours"
+difficulty: "all-levels"
+

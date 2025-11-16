@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Rubik's Cube</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+        
+        canvas {
+            display: block;
+        }
+        
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #ffffff;
+            font-size: 14px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+            border: 1px solid #0088ff;
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.3);
+        }
+        
+        .controls h3 {
+            margin: 0 0 10px 0;
+            color: #00ddff;
+            text-shadow: 0 0 10px #00ddff;
+        }
+        
+        .control-group {
+            margin: 10px 0;
+        }
+        
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #cccccc;
+        }
+        
+        input[type="range"] {
+            width: 150px;
+            margin: 5px 0;
+        }
+        
+        button {
+            background: #0066cc;
+            color: #fff;
+            border: none;
+            padding: 8px 12px;
+            margin: 2px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            box-shadow: 0 0 10px rgba(0, 102, 204, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: #0088ff;
+            box-shadow: 0 0 15px rgba(0, 136, 255, 0.8);
+        }
+        
+        .face-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin: 10px 0;
+        }
+        
+        .info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: #888;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h3>Neon Rubik's Cube</h3>
+        <div class="control-group">
+            <label>Auto-Rotation Speed:</label>
+            <input type="range" id="rotationSpeed" min="0" max="0.02" step="0.001" value="0.005">
+        </div>
+        <div class="control-group">
+            <label>Neon Intensity:</label>
+            <input type="range" id="neonIntensity" min="0.1" max="2" step="0.1" value="1">
+        </div>
+        <div class="control-group">
+            <label>Camera Distance:</label>
+            <input type="range" id="cameraDistance" min="4" max="12" step="0.5" value="8">
+        </div>
+        <div class="control-group">
+            <button onclick="toggleAnimation()">Toggle Auto-Rotate</button>
+            <button onclick="toggleNeon()">Toggle Neon</button>
+            <button onclick="resetCamera()">Reset View</button>
+            <button onclick="scrambleCube()">Scramble</button>
+        </div>
+        <div class="control-group">
+            <label>Rotate Faces:</label>
+            <div class="face-buttons">
+                <button onclick="rotateFace('F')">F</button>
+                <button onclick="rotateFace('U')">U</button>
+                <button onclick="rotateFace('R')">R</button>
+                <button onclick="rotateFace('B')">B</button>
+                <button onclick="rotateFace('D')">D</button>
+                <button onclick="rotateFace('L')">L</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="info">
+        Drag to rotate view • Scroll to zoom • F=Front, U=Up, R=Right, B=Back, D=Down, L=Left
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        let scene, camera, renderer, rubiksCube;
+        let isAnimating = true;
+        let rotationSpeed = 0.005;
+        let neonIntensity = 1;
+        let neonEnabled = true;
+        let mouse = { x: 0, y: 0 };
+        let isMouseDown = false;
+        let mouseStart = { x: 0, y: 0 };
+        let cameraRotation = { x: 0, y: 0 };
+        let cubelets = [];
+        let isRotating = false;
+        let neonLights = [];
+        let wireframes = [];
+
+        // Rubik's cube state - 3D array [x][y][z]
+        let cubeState = [];
+
+        function init() {
+            // Create scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000);
+
+            // Create camera
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(5, 5, 8);
+            camera.lookAt(0, 0, 0);
+
+            // Create renderer with improved settings
+            renderer = new THREE.WebGLRenderer({ 
+                antialias: true,
+                preserveDrawingBuffer: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ReinhardToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            
+            // Improve clipping planes
+            camera.near = 0.1;
+            camera.far = 1000;
+            camera.updateProjectionMatrix();
+            
+            document.body.appendChild(renderer.domElement);
+
+            // Initialize cube state
+            initializeCubeState();
+
+            // Create Rubik's cube
+            createRubiksCube();
+
+            // Add lights
+            setupLighting();
+
+            // Add neon particles
+            createNeonParticles();
+
+            // Event listeners
+            setupEventListeners();
+        }
+
+        function initializeCubeState() {
+            cubeState = [];
+            for (let x = 0; x < 3; x++) {
+                cubeState[x] = [];
+                for (let y = 0; y < 3; y++) {
+                    cubeState[x][y] = [];
+                    for (let z = 0; z < 3; z++) {
+                        cubeState[x][y][z] = { x, y, z };
+                    }
+                }
+            }
+        }
+
+        function createRubiksCube() {
+            rubiksCube = new THREE.Group();
+            const cubeSize = 0.9;
+            const gap = 0.1;
+            const positions = [-1, 0, 1];
+
+            cubelets = [];
+
+            // Create 3x3x3 grid of cubelets
+            for (let x = 0; x < 3; x++) {
+                cubelets[x] = [];
+                for (let y = 0; y < 3; y++) {
+                    cubelets[x][y] = [];
+                    for (let z = 0; z < 3; z++) {
+                        const cubelet = createCubelet(cubeSize, x, y, z);
+                        cubelet.position.set(
+                            positions[x] * (cubeSize + gap),
+                            positions[y] * (cubeSize + gap),
+                            positions[z] * (cubeSize + gap)
+                        );
+                        cubelet.userData = { x, y, z };
+                        cubelets[x][y][z] = cubelet;
+                        rubiksCube.add(cubelet);
+                    }
+                }
+            }
+
+            scene.add(rubiksCube);
+        }
+
+        function createCubelet(size, x, y, z) {
+            const geometry = new THREE.BoxGeometry(size, size, size);
+            
+            // Calculate if this is every 4th cube
+            const cubeIndex = x * 9 + y * 3 + z;
+            const isTexturedCube = (cubeIndex % 4 === 0);
+            
+            // Create materials with metallic and matte blacks
+            const materials = [];
+            
+            // Define color variations for metallic and matte blacks
+            const metallicColors = [0x1a1a1a, 0x2a2a2a, 0x333333, 0x404040];
+            const matteColors = [0x0a0a0a, 0x121212, 0x1c1c1c, 0x262626];
+            
+            // Create base materials for each face
+            for (let face = 0; face < 6; face++) {
+                const isMetallic = Math.random() > 0.5;
+                const colorArray = isMetallic ? metallicColors : matteColors;
+                const color = colorArray[Math.floor(Math.random() * colorArray.length)];
+                
+                if (isMetallic) {
+                    materials.push(new THREE.MeshPhongMaterial({ 
+                        color: color,
+                        shininess: 150,
+                        specular: 0x444444,
+                        reflectivity: 0.3
+                    }));
+                } else {
+                    materials.push(new THREE.MeshLambertMaterial({ 
+                        color: color
+                    }));
+                }
+            }
+
+            const cubelet = new THREE.Mesh(geometry, materials);
+            cubelet.castShadow = true;
+            cubelet.receiveShadow = true;
+
+            // Add neon wireframe with proper tracking
+            const wireframeGeometry = new THREE.EdgesGeometry(geometry);
+            const wireframeMaterial = new THREE.LineBasicMaterial({ 
+                color: 0x00ddff,
+                linewidth: 2,
+                transparent: true,
+                opacity: 0.8,
+                visible: neonEnabled
+            });
+            const wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
+            cubelet.add(wireframe);
+            wireframes.push(wireframeMaterial); // Track for neon toggle
+
+            // Add texture to every 4th cube
+            if (isTexturedCube) {
+                const textureTypes = ['dots', 'lines', 'mesh', 'carbon'];
+                const textureType = textureTypes[Math.floor(Math.random() * textureTypes.length)];
+                
+                const textureCanvas = document.createElement('canvas');
+                textureCanvas.width = textureCanvas.height = 128;
+                const ctx = textureCanvas.getContext('2d');
+                
+                // Create different texture patterns
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, 128, 128);
+                
+                switch (textureType) {
+                    case 'dots':
+                        ctx.fillStyle = '#333';
+                        for (let i = 0; i < 16; i++) {
+                            for (let j = 0; j < 16; j++) {
+                                if ((i + j) % 2 === 0) {
+                                    ctx.fillRect(i * 8 + 2, j * 8 + 2, 4, 4);
+                                }
+                            }
+                        }
+                        break;
+                        
+                    case 'lines':
+                        ctx.strokeStyle = '#2a2a2a';
+                        ctx.lineWidth = 2;
+                        for (let i = 0; i < 128; i += 8) {
+                            ctx.beginPath();
+                            ctx.moveTo(i, 0);
+                            ctx.lineTo(i, 128);
+                            ctx.stroke();
+                        }
+                        break;
+                        
+                    case 'mesh':
+                        ctx.fillStyle = '#1a1a1a';
+                        for (let i = 0; i < 32; i++) {
+                            for (let j = 0; j < 32; j++) {
+                                if ((i + j) % 4 === 0) {
+                                    ctx.fillRect(i * 4, j * 4, 2, 2);
+                                }
+                            }
+                        }
+                        break;
+                        
+                    case 'carbon':
+                        // Carbon fiber-like pattern
+                        ctx.fillStyle = '#111';
+                        for (let i = 0; i < 128; i += 4) {
+                            for (let j = 0; j < 128; j += 4) {
+                                const offset = Math.floor(i / 8) % 2 === 0 ? 0 : 2;
+                                ctx.fillRect(i + offset, j, 2, 2);
+                            }
+                        }
+                        break;
+                }
+                
+                const texture = new THREE.CanvasTexture(textureCanvas);
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                
+                // Create textured material
+                const texturedMaterial = new THREE.MeshPhongMaterial({ 
+                    map: texture,
+                    color: 0x202020,
+                    shininess: 80,
+                    specular: 0x333333
+                });
+                
+                // Apply texture to 2-3 random faces
+                const newMaterials = [...materials];
+                const facesToTexture = Math.floor(Math.random() * 2) + 2; // 2 or 3 faces
+                const faces = [0, 1, 2, 3, 4, 5];
+                
+                for (let i = 0; i < facesToTexture; i++) {
+                    const randomFaceIndex = Math.floor(Math.random() * faces.length);
+                    const face = faces.splice(randomFaceIndex, 1)[0];
+                    newMaterials[face] = texturedMaterial;
+                }
+                
+                cubelet.material = newMaterials;
+            }
+
+            return cubelet;
+        }
+
+        function rotateFace(face) {
+            if (isRotating) return;
+            isRotating = true;
+
+            const cubeletsToRotate = [];
+
+            // Determine which cubelets belong to the face
+            switch (face) {
+                case 'F': // Front face (z = 2)
+                    for (let x = 0; x < 3; x++) {
+                        for (let y = 0; y < 3; y++) {
+                            cubeletsToRotate.push(cubelets[x][y][2]);
+                        }
+                    }
+                    break;
+                case 'B': // Back face (z = 0)
+                    for (let x = 0; x < 3; x++) {
+                        for (let y = 0; y < 3; y++) {
+                            cubeletsToRotate.push(cubelets[x][y][0]);
+                        }
+                    }
+                    break;
+                case 'U': // Up face (y = 2)
+                    for (let x = 0; x < 3; x++) {
+                        for (let z = 0; z < 3; z++) {
+                            cubeletsToRotate.push(cubelets[x][2][z]);
+                        }
+                    }
+                    break;
+                case 'D': // Down face (y = 0)
+                    for (let x = 0; x < 3; x++) {
+                        for (let z = 0; z < 3; z++) {
+                            cubeletsToRotate.push(cubelets[x][0][z]);
+                        }
+                    }
+                    break;
+                case 'R': // Right face (x = 2)
+                    for (let y = 0; y < 3; y++) {
+                        for (let z = 0; z < 3; z++) {
+                            cubeletsToRotate.push(cubelets[2][y][z]);
+                        }
+                    }
+                    break;
+                case 'L': // Left face (x = 0)
+                    for (let y = 0; y < 3; y++) {
+                        for (let z = 0; z < 3; z++) {
+                            cubeletsToRotate.push(cubelets[0][y][z]);
+                        }
+                    }
+                    break;
+            }
+
+            // Store the starting positions and rotations
+            const startPositions = [];
+            const startRotations = [];
+            const targetPositions = [];
+            const targetRotations = [];
+
+            cubeletsToRotate.forEach(cubelet => {
+                startPositions.push(cubelet.position.clone());
+                startRotations.push(cubelet.rotation.clone());
+
+                // Calculate target position by rotating current position around origin
+                const targetPos = cubelet.position.clone();
+                const targetRot = cubelet.rotation.clone();
+
+                // Apply rotation around the appropriate axis
+                switch (face) {
+                    case 'F': // Rotate around Z axis (positive)
+                        targetPos.applyAxisAngle(new THREE.Vector3(0, 0, 1), Math.PI / 2);
+                        targetRot.z += Math.PI / 2;
+                        break;
+                    case 'B': // Rotate around Z axis (negative)
+                        targetPos.applyAxisAngle(new THREE.Vector3(0, 0, 1), -Math.PI / 2);
+                        targetRot.z -= Math.PI / 2;
+                        break;
+                    case 'U': // Rotate around Y axis (positive)
+                        targetPos.applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI / 2);
+                        targetRot.y += Math.PI / 2;
+                        break;
+                    case 'D': // Rotate around Y axis (negative)
+                        targetPos.applyAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 2);
+                        targetRot.y -= Math.PI / 2;
+                        break;
+                    case 'R': // Rotate around X axis (positive)
+                        targetPos.applyAxisAngle(new THREE.Vector3(1, 0, 0), Math.PI / 2);
+                        targetRot.x += Math.PI / 2;
+                        break;
+                    case 'L': // Rotate around X axis (negative)
+                        targetPos.applyAxisAngle(new THREE.Vector3(1, 0, 0), -Math.PI / 2);
+                        targetRot.x -= Math.PI / 2;
+                        break;
+                }
+
+                // Normalize rotations to prevent accumulation errors
+                targetRot.x = ((targetRot.x % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+                targetRot.y = ((targetRot.y % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+                targetRot.z = ((targetRot.z % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+
+                // Snap to nearest 90-degree increment to prevent drift
+                targetRot.x = Math.round(targetRot.x / (Math.PI / 2)) * (Math.PI / 2);
+                targetRot.y = Math.round(targetRot.y / (Math.PI / 2)) * (Math.PI / 2);
+                targetRot.z = Math.round(targetRot.z / (Math.PI / 2)) * (Math.PI / 2);
+
+                // Round positions to prevent floating point drift
+                targetPos.x = Math.round(targetPos.x * 1000) / 1000;
+                targetPos.y = Math.round(targetPos.y * 1000) / 1000;
+                targetPos.z = Math.round(targetPos.z * 1000) / 1000;
+
+                targetPositions.push(targetPos);
+                targetRotations.push(targetRot);
+            });
+
+            // Animate the rotation
+            const startTime = Date.now();
+            const duration = 500;
+
+            function animateRotation() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Smooth easing function
+                const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+                // Interpolate each cubelet's position and rotation
+                cubeletsToRotate.forEach((cubelet, index) => {
+                    // Interpolate position
+                    cubelet.position.lerpVectors(startPositions[index], targetPositions[index], easeProgress);
+                    
+                    // Interpolate rotation
+                    cubelet.rotation.x = startRotations[index].x + (targetRotations[index].x - startRotations[index].x) * easeProgress;
+                    cubelet.rotation.y = startRotations[index].y + (targetRotations[index].y - startRotations[index].y) * easeProgress;
+                    cubelet.rotation.z = startRotations[index].z + (targetRotations[index].z - startRotations[index].z) * easeProgress;
+                });
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateRotation);
+                } else {
+                    // Ensure final positions are exact and clean up any floating point errors
+                    cubeletsToRotate.forEach((cubelet, index) => {
+                        cubelet.position.copy(targetPositions[index]);
+                        cubelet.rotation.copy(targetRotations[index]);
+                        
+                        // Additional cleanup to ensure positions are exact
+                        cubelet.position.x = Math.round(cubelet.position.x * 1000) / 1000;
+                        cubelet.position.y = Math.round(cubelet.position.y * 1000) / 1000;
+                        cubelet.position.z = Math.round(cubelet.position.z * 1000) / 1000;
+                        
+                        // Ensure rotations are clean multiples of 90 degrees
+                        cubelet.rotation.x = Math.round(cubelet.rotation.x / (Math.PI / 2)) * (Math.PI / 2);
+                        cubelet.rotation.y = Math.round(cubelet.rotation.y / (Math.PI / 2)) * (Math.PI / 2);
+                        cubelet.rotation.z = Math.round(cubelet.rotation.z / (Math.PI / 2)) * (Math.PI / 2);
+                    });
+
+                    updateCubeState(face);
+                    isRotating = false;
+                }
+            }
+
+            animateRotation();
+        }
+
+        function updateCubeState(face) {
+            // Update internal cube state after rotation
+            // We need to update the cubelets array to reflect the new positions
+            
+            const newCubelets = [];
+            for (let x = 0; x < 3; x++) {
+                newCubelets[x] = [];
+                for (let y = 0; y < 3; y++) {
+                    newCubelets[x][y] = [];
+                    for (let z = 0; z < 3; z++) {
+                        newCubelets[x][y][z] = null;
+                    }
+                }
+            }
+            
+            // Go through all cubelets and find their new grid positions based on their actual positions
+            const cubeSize = 0.9;
+            const gap = 0.1;
+            const spacing = cubeSize + gap;
+            
+            for (let x = 0; x < 3; x++) {
+                for (let y = 0; y < 3; y++) {
+                    for (let z = 0; z < 3; z++) {
+                        const cubelet = cubelets[x][y][z];
+                        if (cubelet) {
+                            // Find which grid position this cubelet is now at
+                            const gridX = Math.round((cubelet.position.x + spacing) / spacing);
+                            const gridY = Math.round((cubelet.position.y + spacing) / spacing);
+                            const gridZ = Math.round((cubelet.position.z + spacing) / spacing);
+                            
+                            // Make sure the grid position is valid
+                            if (gridX >= 0 && gridX < 3 && gridY >= 0 && gridY < 3 && gridZ >= 0 && gridZ < 3) {
+                                newCubelets[gridX][gridY][gridZ] = cubelet;
+                                cubelet.userData = { x: gridX, y: gridY, z: gridZ };
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Update the global cubelets array
+            cubelets = newCubelets;
+            
+            console.log(`Updated cube state after ${face} rotation`);
+        }
+
+        function scrambleCube() {
+            if (isRotating) return;
+            
+            const faces = ['F', 'B', 'U', 'D', 'R', 'L'];
+            const moves = 2; // Only 2 moves as requested
+            let moveCount = 0;
+
+            function makeRandomMove() {
+                if (moveCount < moves && !isRotating) {
+                    const randomFace = faces[Math.floor(Math.random() * faces.length)];
+                    console.log(`Scramble move ${moveCount + 1}: ${randomFace}`);
+                    rotateFace(randomFace);
+                    moveCount++;
+                    
+                    // Wait for current rotation to finish before next move
+                    setTimeout(() => {
+                        if (!isRotating && moveCount < moves) {
+                            makeRandomMove();
+                        }
+                    }, 700); // Slightly longer wait to ensure completion
+                }
+            }
+
+            makeRandomMove();
+        }
+
+        function setupLighting() {
+            // Ambient light
+            const ambientLight = new THREE.AmbientLight(0x001122, 0.2);
+            scene.add(ambientLight);
+
+            // Main neon blue light
+            const neonLight1 = new THREE.PointLight(0x00ddff, 2, 100);
+            neonLight1.position.set(5, 5, 5);
+            neonLight1.castShadow = true;
+            neonLight1.userData.baseIntensity = 2;
+            neonLight1.visible = neonEnabled;
+            neonLights.push(neonLight1);
+            scene.add(neonLight1);
+
+            // Secondary neon light
+            const neonLight2 = new THREE.PointLight(0x0088ff, 1.5, 100);
+            neonLight2.position.set(-5, 0, 5);
+            neonLight2.userData.baseIntensity = 1.5;
+            neonLight2.visible = neonEnabled;
+            neonLights.push(neonLight2);
+            scene.add(neonLight2);
+
+            // Accent light
+            const accentLight = new THREE.PointLight(0x00ffdd, 1, 50);
+            accentLight.position.set(0, -5, 0);
+            accentLight.userData.baseIntensity = 1;
+            accentLight.visible = neonEnabled;
+            neonLights.push(accentLight);
+            scene.add(accentLight);
+
+            // Directional light for shadows
+            const directionalLight = new THREE.DirectionalLight(0x0066cc, 0.5);
+            directionalLight.position.set(10, 10, 10);
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+        }
+
+        function createNeonParticles() {
+            const particleCount = 200;
+            const particles = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                positions[i3] = (Math.random() - 0.5) * 30;
+                positions[i3 + 1] = (Math.random() - 0.5) * 30;
+                positions[i3 + 2] = (Math.random() - 0.5) * 30;
+
+                colors[i3] = 0.1;
+                colors[i3 + 1] = 0.8;
+                colors[i3 + 2] = 1.0;
+            }
+
+            particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particles.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                transparent: true,
+                opacity: 0.6,
+                vertexColors: true,
+                blending: THREE.AdditiveBlending
+            });
+
+            const particleSystem = new THREE.Points(particles, particleMaterial);
+            scene.add(particleSystem);
+        }
+
+        function setupEventListeners() {
+            window.addEventListener('resize', onWindowResize);
+            
+            renderer.domElement.addEventListener('mousedown', onMouseDown);
+            renderer.domElement.addEventListener('mousemove', onMouseMove);
+            renderer.domElement.addEventListener('mouseup', onMouseUp);
+            renderer.domElement.addEventListener('wheel', onMouseWheel);
+
+            document.getElementById('rotationSpeed').addEventListener('input', (e) => {
+                rotationSpeed = parseFloat(e.target.value);
+            });
+
+            document.getElementById('neonIntensity').addEventListener('input', (e) => {
+                neonIntensity = parseFloat(e.target.value);
+                updateNeonIntensity();
+            });
+
+            document.getElementById('cameraDistance').addEventListener('input', (e) => {
+                const distance = parseFloat(e.target.value);
+                camera.position.normalize().multiplyScalar(distance);
+            });
+        }
+
+        function updateNeonIntensity() {
+            scene.traverse((child) => {
+                if (child.isPointLight && child.userData.baseIntensity) {
+                    child.intensity = child.userData.baseIntensity * neonIntensity;
+                }
+            });
+        }
+
+        function onMouseDown(event) {
+            isMouseDown = true;
+            mouseStart.x = event.clientX;
+            mouseStart.y = event.clientY;
+        }
+
+        function onMouseMove(event) {
+            if (!isMouseDown) return;
+
+            const deltaX = event.clientX - mouseStart.x;
+            const deltaY = event.clientY - mouseStart.y;
+
+            cameraRotation.y += deltaX * 0.01;
+            cameraRotation.x += deltaY * 0.01;
+
+            cameraRotation.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, cameraRotation.x));
+            updateCameraPosition();
+
+            mouseStart.x = event.clientX;
+            mouseStart.y = event.clientY;
+        }
+
+        function onMouseUp() {
+            isMouseDown = false;
+        }
+
+        function onMouseWheel(event) {
+            const distance = camera.position.length();
+            const newDistance = Math.max(3, Math.min(15, distance + event.deltaY * 0.01));
+            camera.position.normalize().multiplyScalar(newDistance);
+            document.getElementById('cameraDistance').value = newDistance;
+        }
+
+        function updateCameraPosition() {
+            const distance = camera.position.length();
+            camera.position.x = distance * Math.cos(cameraRotation.x) * Math.sin(cameraRotation.y);
+            camera.position.y = distance * Math.sin(cameraRotation.x);
+            camera.position.z = distance * Math.cos(cameraRotation.x) * Math.cos(cameraRotation.y);
+            camera.lookAt(0, 0, 0);
+        }
+
+        function toggleNeon() {
+            neonEnabled = !neonEnabled;
+            
+            // Toggle neon lights
+            neonLights.forEach(light => {
+                light.visible = neonEnabled;
+            });
+            
+            // Toggle wireframes
+            wireframes.forEach(material => {
+                material.visible = neonEnabled;
+            });
+            
+            // Toggle particle system
+            scene.traverse(child => {
+                if (child.isPoints) {
+                    child.visible = neonEnabled;
+                }
+            });
+        }
+
+        function toggleAnimation() {
+            isAnimating = !isAnimating;
+        }
+
+        function resetCamera() {
+            camera.position.set(5, 5, 8);
+            camera.lookAt(0, 0, 0);
+            cameraRotation.x = 0;
+            cameraRotation.y = 0;
+            document.getElementById('cameraDistance').value = 8;
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (isAnimating && !isRotating) {
+                rubiksCube.rotation.x += rotationSpeed;
+                rubiksCube.rotation.y += rotationSpeed * 1.2;
+                rubiksCube.rotation.z += rotationSpeed * 0.8;
+            }
+
+            // Animate neon glow only if neon is enabled
+            if (neonEnabled) {
+                const time = Date.now() * 0.003;
+                wireframes.forEach(material => {
+                    if (material.visible) {
+                        material.opacity = 0.6 + 0.4 * Math.sin(time * 2);
+                    }
+                });
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Initialize and start the scene
+        init();
+        animate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+.portfolioContainer {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  background-color: var(--gh-bg);
+  color: var(--gh-text);
+  overflow: hidden;
+}

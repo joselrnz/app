@@ -1,0 +1,64 @@
+{
+  "modules": {
+    "voltage_divider": {
+      "ports": {
+        "Vin": {
+          "direction": "input",
+          "bits": [
+            2
+          ]
+        },
+        "Vout": {
+          "direction": "output",
+          "bits": [
+            3
+          ]
+        },
+        "GND": {
+          "direction": "input",
+          "bits": [
+            4
+          ]
+        }
+      },
+      "cells": {
+        "R1": {
+          "type": "r_v",
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          },
+          "connections": {
+            "A": [
+              2
+            ],
+            "B": [
+              5
+            ]
+          },
+          "attributes": {
+            "value": "10k\u03a9"
+          }
+        },
+        "R2": {
+          "type": "r_v",
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          },
+          "connections": {
+            "A": [
+              5
+            ],
+            "B": [
+              4
+            ]
+          },
+          "attributes": {
+            "value": "10k\u03a9"
+          }
+        }
+      }
+    }
+  }
+}

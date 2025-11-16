@@ -1,0 +1,76 @@
+{
+  "modules": {
+    "rlc_series": {
+      "ports": {
+        "Vin": {
+          "direction": "input",
+          "bits": [
+            2
+          ]
+        },
+        "GND": {
+          "direction": "input",
+          "bits": [
+            4
+          ]
+        }
+      },
+      "cells": {
+        "R1": {
+          "type": "r_v",
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          },
+          "connections": {
+            "A": [
+              2
+            ],
+            "B": [
+              5
+            ]
+          },
+          "attributes": {
+            "value": "100\u03a9"
+          }
+        },
+        "L1": {
+          "type": "l_v",
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          },
+          "connections": {
+            "A": [
+              5
+            ],
+            "B": [
+              6
+            ]
+          },
+          "attributes": {
+            "value": "10mH"
+          }
+        },
+        "C1": {
+          "type": "c_v",
+          "port_directions": {
+            "A": "input",
+            "B": "output"
+          },
+          "connections": {
+            "A": [
+              6
+            ],
+            "B": [
+              4
+            ]
+          },
+          "attributes": {
+            "value": "100\u00b5F"
+          }
+        }
+      }
+    }
+  }
+}
