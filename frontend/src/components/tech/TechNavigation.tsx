@@ -1,12 +1,13 @@
 import Link from 'next/link'
 
 interface TechNavigationProps {
-  currentCategory?: 'circuits' | 'linux' | 'ai' | 'notes'
+  currentCategory?: 'circuits' | 'kubernetes' | 'linux' | 'ai' | 'notes'
 }
 
 export default function TechNavigation({ currentCategory }: TechNavigationProps) {
   const categories = [
     { name: 'Circuits', href: '/tech/circuits', key: 'circuits' },
+    { name: 'Kubernetes', href: '/tech/kubernetes', key: 'kubernetes' },
     { name: 'Linux/IoT', href: '/tech/linux', key: 'linux' },
     { name: 'AI/ML', href: '/tech/ai', key: 'ai' },
     { name: 'Notes', href: '/tech/notes', key: 'notes' },

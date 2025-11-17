@@ -56,7 +56,8 @@
     "precommit": "npm run lint:strict && npm run type-check && npm run format:check",
     "prebuild": "npm run clean && npm run type-check",
     "create-article": "node ../scripts/create-article.js",
-    "quick-article": "node ../scripts/quick-article.js"
+    "quick-article": "node ../scripts/quick-article.js",
+    "watch-deploy": "node ../scripts/watch-and-deploy.js"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.0",

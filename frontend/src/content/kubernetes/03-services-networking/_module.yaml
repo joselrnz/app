@@ -1,0 +1,9 @@
+title: "Services & Networking"
+description: "Configure Services, Ingress, and Network Policies"
+order: 3
+icon: "🌐"
+color: "#326CE5"
+prerequisites: ["02-workloads-scheduling"]
+estimatedTime: "3 hours"
+difficulty: "intermediate"
+

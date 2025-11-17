@@ -1,0 +1,9 @@
+title: "Workloads & Scheduling"
+description: "Master Pods, Deployments, and advanced scheduling techniques"
+order: 2
+icon: "📦"
+color: "#326CE5"
+prerequisites: ["01-cluster-architecture"]
+estimatedTime: "4 hours"
+difficulty: "intermediate"
+

@@ -83,55 +83,197 @@ export function RubiksCube() {
       const gap = 0.1
       let index = 0
 
+      // Create procedural textures for mesh/perforated patterns (very subtle, dark)
+      const createMeshTexture = () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = 512
+        canvas.height = 512
+        const ctx = canvas.getContext('2d')!
+
+        // Very dark background
+        ctx.fillStyle = '#1a1a1a'
+        ctx.fillRect(0, 0, 512, 512)
+
+        // Hexagonal mesh pattern - barely visible
+        ctx.fillStyle = '#050505'
+        const hexSize = 14
+        for (let y = 0; y < 512; y += hexSize * 1.5) {
+          for (let x = 0; x < 512; x += hexSize * Math.sqrt(3)) {
+            const offsetX = (y / (hexSize * 1.5)) % 2 === 0 ? 0 : hexSize * Math.sqrt(3) / 2
+            ctx.beginPath()
+            for (let i = 0; i < 6; i++) {
+              const angle = (Math.PI / 3) * i
+              const hx = x + offsetX + hexSize * Math.cos(angle)
+              const hy = y + hexSize * Math.sin(angle)
+              if (i === 0) ctx.moveTo(hx, hy)
+              else ctx.lineTo(hx, hy)
+            }
+            ctx.closePath()
+            ctx.fill()
+          }
+        }
+
+        // Very subtle highlights
+        ctx.fillStyle = '#2a2a2a'
+        ctx.globalAlpha = 0.15
+        for (let y = 0; y < 512; y += hexSize * 1.5) {
+          for (let x = 0; x < 512; x += hexSize * Math.sqrt(3)) {
+            const offsetX = (y / (hexSize * 1.5)) % 2 === 0 ? 0 : hexSize * Math.sqrt(3) / 2
+            ctx.fillRect(x + offsetX - 1, y - 1, 2, 2)
+          }
+        }
+        ctx.globalAlpha = 1.0
+
+        const texture = new THREE.CanvasTexture(canvas)
+        texture.wrapS = THREE.RepeatWrapping
+        texture.wrapT = THREE.RepeatWrapping
+        texture.repeat.set(4, 4)
+        return texture
+      }
+
+      const createPerforatedTexture = () => {
+        const canvas = document.createElement('canvas')
+        canvas.width = 512
+        canvas.height = 512
+        const ctx = canvas.getContext('2d')!
+
+        // Very dark background
+        ctx.fillStyle = '#151515'
+        ctx.fillRect(0, 0, 512, 512)
+
+        // Grid of tiny holes - subtle
+        ctx.fillStyle = '#000000'
+        const spacing = 16
+        const holeSize = 4
+        for (let y = spacing / 2; y < 512; y += spacing) {
+          for (let x = spacing / 2; x < 512; x += spacing) {
+            ctx.beginPath()
+            ctx.arc(x, y, holeSize, 0, Math.PI * 2)
+            ctx.fill()
+          }
+        }
+
+        // Very subtle highlights around holes
+        ctx.strokeStyle = '#252525'
+        ctx.lineWidth = 0.5
+        ctx.globalAlpha = 0.3
+        for (let y = spacing / 2; y < 512; y += spacing) {
+          for (let x = spacing / 2; x < 512; x += spacing) {
+            ctx.beginPath()
+            ctx.arc(x, y, holeSize + 0.5, 0, Math.PI * 2)
+            ctx.stroke()
+          }
+        }
+        ctx.globalAlpha = 1.0
+
+        const texture = new THREE.CanvasTexture(canvas)
+        texture.wrapS = THREE.RepeatWrapping
+        texture.wrapT = THREE.RepeatWrapping
+        texture.repeat.set(4, 4)
+        return texture
+      }
+
+      const meshTexture = createMeshTexture()
+      const perforatedTexture = createPerforatedTexture()
+
       for (let x = 0; x < 3; x++) {
         for (let y = 0; y < 3; y++) {
           for (let z = 0; z < 3; z++) {
             const geometry = new THREE.BoxGeometry(0.9, 0.9, 0.9)
 
-            // Create dark materials
-            const isTextured = index % 4 === 0
+            // Enhanced color palette with more variety and vibrancy
             const surfaceType = Math.random()
 
             let material
-            if (surfaceType < 0.25 && isTextured) {
+            if (surfaceType < 0.12) {
+              // Vibrant cyan metallic
               material = new THREE.MeshStandardMaterial({
-                color: 0x2a2a2a,
-                metalness: 0.6,
-                roughness: 0.2,
+                color: 0x2a5a6a,
+                metalness: 0.85,
+                roughness: 0.25,
                 transparent: false,
                 opacity: 1.0,
-                emissive: 0x111111,
+                emissive: 0x0a2a3a,
                 emissiveIntensity: 0.15
               })
-            } else if (surfaceType < 0.5) {
+            } else if (surfaceType < 0.24) {
+              // Electric blue with high metalness
               material = new THREE.MeshStandardMaterial({
-                color: 0x1a1a1a,
-                metalness: 0.6,
+                color: 0x1a4a7a,
+                metalness: 0.9,
                 roughness: 0.2,
                 transparent: false,
                 opacity: 1.0,
-                emissive: 0x111111,
-                emissiveIntensity: 0.15
+                emissive: 0x0a2550,
+                emissiveIntensity: 0.2
               })
-            } else if (surfaceType < 0.75) {
+            } else if (surfaceType < 0.36) {
+              // Textured mesh pattern with blue tint
               material = new THREE.MeshStandardMaterial({
-                color: 0x333333,
+                color: 0x3a4a5a,
                 metalness: 0.6,
-                roughness: 0.2,
+                roughness: 0.5,
+                map: meshTexture,
                 transparent: false,
                 opacity: 1.0,
-                emissive: 0x111111,
-                emissiveIntensity: 0.15
+                emissive: 0x0a1520,
+                emissiveIntensity: 0.08
+              })
+            } else if (surfaceType < 0.48) {
+              // Perforated grid pattern with enhanced contrast
+              material = new THREE.MeshStandardMaterial({
+                color: 0x354555,
+                metalness: 0.65,
+                roughness: 0.45,
+                map: perforatedTexture,
+                transparent: false,
+                opacity: 1.0,
+                emissive: 0x0a1a25,
+                emissiveIntensity: 0.1
+              })
+            } else if (surfaceType < 0.60) {
+              // Deep charcoal with subtle blue emissive
+              material = new THREE.MeshStandardMaterial({
+                color: 0x1a1a2a,
+                metalness: 0.3,
+                roughness: 0.8,
+                transparent: false,
+                opacity: 1.0,
+                emissive: 0x050510,
+                emissiveIntensity: 0.05
+              })
+            } else if (surfaceType < 0.72) {
+              // Teal metallic accent
+              material = new THREE.MeshStandardMaterial({
+                color: 0x2a5555,
+                metalness: 0.8,
+                roughness: 0.3,
+                transparent: false,
+                opacity: 1.0,
+                emissive: 0x0a2525,
+                emissiveIntensity: 0.12
+              })
+            } else if (surfaceType < 0.84) {
+              // Steel blue with high shine
+              material = new THREE.MeshStandardMaterial({
+                color: 0x3a5a7a,
+                metalness: 0.9,
+                roughness: 0.15,
+                transparent: false,
+                opacity: 1.0,
+                emissive: 0x0a1a2a,
+                emissiveIntensity: 0.18
               })
             } else {
+              // Premium dark metallic with bright blue emissive
               material = new THREE.MeshStandardMaterial({
-                color: 0x252525,
-                metalness: 0.6,
-                roughness: 0.2,
+                color: 0x2a3a5a,
+                metalness: 0.95,
+                roughness: 0.1,
                 transparent: false,
                 opacity: 1.0,
-                emissive: 0x111111,
-                emissiveIntensity: 0.15
+                emissive: 0x1a2a4a,
+                emissiveIntensity: 0.25
               })
             }
 
@@ -144,11 +286,35 @@ export function RubiksCube() {
             cubelet.castShadow = true
             cubelet.receiveShadow = true
 
-            // Add wireframe edges
+            // Enhanced glowing edges with better visibility
             const edges = new THREE.EdgesGeometry(geometry)
+            let edgeColor, edgeOpacity
+
+            if (surfaceType > 0.84) {
+              // Brightest edges for premium materials
+              edgeColor = 0x4a7aaa
+              edgeOpacity = 0.7
+            } else if (surfaceType > 0.60) {
+              // Medium bright edges
+              edgeColor = 0x3a5a8a
+              edgeOpacity = 0.5
+            } else if (surfaceType > 0.36) {
+              // Subtle blue edges
+              edgeColor = 0x2a4a6a
+              edgeOpacity = 0.4
+            } else {
+              // Minimal edges for darker materials
+              edgeColor = 0x1a2a3a
+              edgeOpacity = 0.3
+            }
+
             const line = new THREE.LineSegments(
               edges,
-              new THREE.LineBasicMaterial({ color: 0x4b5563, transparent: true, opacity: 0.4 })
+              new THREE.LineBasicMaterial({
+                color: edgeColor,
+                transparent: true,
+                opacity: edgeOpacity
+              })
             )
             cubelet.add(line)
 
@@ -184,14 +350,14 @@ export function RubiksCube() {
       floorGeometry = new THREE.PlaneGeometry(floorSize, floorSize, floorSegments, floorSegments)
       floorGeometry.rotateX(-Math.PI / 2)
 
-      // Custom shader material for circuit board effect
+      // Custom shader material for circuit board effect with enhanced colors
       floorMaterial = new THREE.ShaderMaterial({
         uniforms: {
           time: { value: 0 },
           gridScale: { value: rippleParams.gridScale },
-          baseColor: { value: new THREE.Color(0x0d1117) },
-          gridColor: { value: new THREE.Color(0x2a3f5f) },  // Darker blue grid lines
-          glowColor: { value: new THREE.Color(0x4a9eff) },  // Bright blue for activated traces
+          baseColor: { value: new THREE.Color(0x0a0f1a) },
+          gridColor: { value: new THREE.Color(0x3a5a7a) },  // Enhanced blue grid lines
+          glowColor: { value: new THREE.Color(0x5abaff) },  // Brighter cyan-blue for activated traces
           ripplePositions: { value: [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()] },
           rippleRadii: { value: [0, 0, 0] },
           rippleStrengths: { value: [0, 0, 0] }
@@ -292,29 +458,37 @@ export function RubiksCube() {
 
       console.log('✅ Circuit board floor created with shader')
 
-      // Darker, more atmospheric lighting for circuit board aesthetic
-      const ambientLight = new THREE.AmbientLight(0x2a2f3a, 0.5)
+      // Enhanced atmospheric lighting for better color visibility
+      const ambientLight = new THREE.AmbientLight(0x2a3a4a, 0.5)
       scene.add(ambientLight)
 
-      const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.5)
+      // Brighter key light to showcase metallic materials
+      const directionalLight1 = new THREE.DirectionalLight(0x6a8aaa, 0.7)
       directionalLight1.position.set(10, 10, 10)
+      directionalLight1.castShadow = true
       scene.add(directionalLight1)
 
-      const directionalLight2 = new THREE.DirectionalLight(0x404050, 0.2)
-      directionalLight2.position.set(-10, -10, -10)
+      // Enhanced fill light with blue tint
+      const directionalLight2 = new THREE.DirectionalLight(0x4a6a8a, 0.4)
+      directionalLight2.position.set(-10, 5, -10)
       scene.add(directionalLight2)
 
-      // Subtle blue accent lights for circuit board glow
-      const pointLight1 = new THREE.PointLight(0x0066aa, 1.0, 100)
+      // Rim light for edge highlights with cyan tint
+      const directionalLight3 = new THREE.DirectionalLight(0x5a7a9a, 0.5)
+      directionalLight3.position.set(0, -5, -15)
+      scene.add(directionalLight3)
+
+      // Vibrant blue accent lights
+      const pointLight1 = new THREE.PointLight(0x2a7aff, 1.2, 100)
       pointLight1.position.set(8, 5, 10)
       scene.add(pointLight1)
 
-      const pointLight2 = new THREE.PointLight(0x004488, 0.8, 100)
+      const pointLight2 = new THREE.PointLight(0x1a5acc, 0.8, 100)
       pointLight2.position.set(8, -3, 10)
       scene.add(pointLight2)
 
-      // Add rim lights for dramatic effect
-      const rimLight1 = new THREE.PointLight(0x003366, 0.4, 100)
+      // Enhanced rim lights for dramatic effect
+      const rimLight1 = new THREE.PointLight(0x2a6aaa, 0.9, 100)
       rimLight1.position.set(0, 10, -10)
       // GSAP loader and intro animations
       const loadGSAP = (): Promise<any> => {
@@ -356,9 +530,14 @@ export function RubiksCube() {
 
       scene.add(rimLight1)
 
-      const rimLight2 = new THREE.PointLight(0x004488, 0.3, 100)
+      const rimLight2 = new THREE.PointLight(0x3a7acc, 0.7, 100)
       rimLight2.position.set(10, -5, 0)
       scene.add(rimLight2)
+
+      // Additional accent light for depth
+      const accentLight = new THREE.PointLight(0x4a9aff, 0.6, 80)
+      accentLight.position.set(-8, 8, -8)
+      scene.add(accentLight)
 
       // Create particle system for impact effects
       const particleCount = 500
@@ -372,11 +551,12 @@ export function RubiksCube() {
         positions[i * 3 + 1] = 0
         positions[i * 3 + 2] = 0
 
-        colors[i * 3] = 0.2
-        colors[i * 3 + 1] = 0.5
-        colors[i * 3 + 2] = 1.0
+        // Enhanced particle colors with more cyan-blue vibrancy
+        colors[i * 3] = 0.3 + Math.random() * 0.2      // R: 0.3-0.5
+        colors[i * 3 + 1] = 0.6 + Math.random() * 0.2  // G: 0.6-0.8
+        colors[i * 3 + 2] = 0.9 + Math.random() * 0.1  // B: 0.9-1.0
 
-        sizes[i] = Math.random() * 0.1 + 0.05
+        sizes[i] = Math.random() * 0.12 + 0.06
       }
 
       particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
@@ -384,9 +564,9 @@ export function RubiksCube() {
       particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1))
 
       const particleMaterial = new THREE.PointsMaterial({
-        size: 0.1,
+        size: 0.12,
         transparent: true,
-        opacity: 0.6,
+        opacity: 0.75,
         vertexColors: true,
         blending: THREE.AdditiveBlending,
         sizeAttenuation: true
@@ -416,12 +596,12 @@ export function RubiksCube() {
         const rings: any[] = []
         const particles: any[] = []
 
-        // Darker, more visible wave crest
-        const waveGeo = new THREE.TorusGeometry(0.5, 0.035, 8, 64)  // Slightly thicker
+        // Enhanced vibrant wave crest
+        const waveGeo = new THREE.TorusGeometry(0.5, 0.04, 8, 64)  // Slightly thicker
         const waveMat = new THREE.MeshBasicMaterial({
-          color: 0x3a6ea5,  // Darker blue (more visible)
+          color: 0x4a9aff,  // Brighter cyan-blue
           transparent: true,
-          opacity: 0.25,    // More visible
+          opacity: 0.4,     // More visible
           side: THREE.DoubleSide,
           blending: THREE.AdditiveBlending
         })

@@ -1,0 +1,9 @@
+title: "CKA Exam Preparation"
+description: "Exam strategies, practice scenarios, and essential tips"
+order: 8
+icon: "🎯"
+color: "#326CE5"
+prerequisites: ["01-cluster-architecture", "02-workloads-scheduling", "03-services-networking", "04-storage", "05-security", "06-cluster-maintenance", "07-troubleshooting"]
+estimatedTime: "4 hours"
+difficulty: "all-levels"
+

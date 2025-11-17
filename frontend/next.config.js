@@ -3,6 +3,14 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   poweredByHeader: false, // Remove X-Powered-By header for security
+  eslint: {
+    // Disable ESLint during production builds
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // Disable TypeScript errors during production builds (already checked in prebuild)
+    ignoreBuildErrors: true,
+  },
 
   // Security Headers
   async headers() {

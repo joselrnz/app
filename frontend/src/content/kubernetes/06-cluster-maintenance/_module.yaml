@@ -1,0 +1,9 @@
+title: "Cluster Maintenance"
+description: "Upgrade clusters, backup/restore etcd, and maintain nodes"
+order: 6
+icon: "🔧"
+color: "#326CE5"
+prerequisites: ["01-cluster-architecture"]
+estimatedTime: "2 hours"
+difficulty: "advanced"
+

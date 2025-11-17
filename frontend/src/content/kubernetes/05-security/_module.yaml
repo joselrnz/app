@@ -1,0 +1,9 @@
+title: "Security & Access Control"
+description: "Implement RBAC, Security Contexts, and Pod Security"
+order: 5
+icon: "🔒"
+color: "#326CE5"
+prerequisites: ["01-cluster-architecture", "02-workloads-scheduling"]
+estimatedTime: "3.5 hours"
+difficulty: "advanced"
+

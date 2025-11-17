@@ -1,0 +1,9 @@
+title: "Storage Management"
+description: "Work with Volumes, PVs, PVCs, and Storage Classes"
+order: 4
+icon: "💾"
+color: "#326CE5"
+prerequisites: ["02-workloads-scheduling"]
+estimatedTime: "2.5 hours"
+difficulty: "intermediate"
+

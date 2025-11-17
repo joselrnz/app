@@ -1,0 +1,9 @@
+title: "Cluster Architecture & Components"
+description: "Understand Kubernetes architecture, control plane, and worker node components"
+order: 1
+icon: "🏗️"
+color: "#326CE5"
+prerequisites: []
+estimatedTime: "2 hours"
+difficulty: "beginner"
+

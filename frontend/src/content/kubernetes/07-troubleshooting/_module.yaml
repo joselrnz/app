@@ -1,0 +1,9 @@
+title: "Troubleshooting"
+description: "Debug applications, control plane, and networking issues"
+order: 7
+icon: "🔍"
+color: "#326CE5"
+prerequisites: ["01-cluster-architecture", "02-workloads-scheduling", "03-services-networking"]
+estimatedTime: "3 hours"
+difficulty: "advanced"
+

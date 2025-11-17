@@ -14,12 +14,20 @@ export default function TechHubPage() {
       color: 'from-yellow-500/20 to-orange-500/20'
     },
     {
+      title: 'Kubernetes & CKA',
+      icon: '☸️',
+      description: 'Kubernetes administration, CKA exam prep, container orchestration, and cloud-native technologies.',
+      href: '/tech/kubernetes',
+      topics: ['Kubernetes', 'CKA Exam', 'Container Orchestration', 'kubectl', 'Helm', 'Cloud Native'],
+      color: 'from-blue-500/20 to-indigo-500/20'
+    },
+    {
       title: 'Linux & IoT',
       icon: '🐧',
       description: 'Linux system administration, IoT platforms, embedded Linux, and automation.',
       href: '/tech/linux',
       topics: ['Linux Admin', 'IoT Platforms', 'Embedded Linux', 'Shell Scripting', 'Systemd', 'Networking'],
-      color: 'from-blue-500/20 to-cyan-500/20'
+      color: 'from-cyan-500/20 to-teal-500/20'
     },
     {
       title: 'AI & Machine Learning',
@@ -134,9 +142,10 @@ export default function TechHubPage() {
           </div>
 
           {/* Stats Section */}
-          <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+          <div className="mt-24 grid grid-cols-2 md:grid-cols-5 gap-8 max-w-5xl mx-auto">
             {[
               { label: 'Circuit Projects', value: '12+' },
+              { label: 'Kubernetes Guides', value: '8+' },
               { label: 'Linux Guides', value: '8+' },
               { label: 'AI Experiments', value: '6+' },
               { label: 'Technical Notes', value: '20+' }
