@@ -1,15 +1,19 @@
 version: '3.8'
 
 services:
-  app:
-    image: ghcr.io/joselrnz/app:latest
-    container_name: jose-portfolio
+  # Frontend Portfolio App
+  frontend:
+    build:
+      context: .
+      dockerfile: ./frontend/Dockerfile
+    image: portfolio:local
+    container_name: portfolio-frontend
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "3002:3000"
     environment:
       - NODE_ENV=production
-      - NEXT_PUBLIC_SITE_URL=${SITE_URL:-http://localhost:3000}
+      - NEXT_PUBLIC_SITE_URL=${FRONTEND_URL:-http://localhost:3002}
       - NEXT_TELEMETRY_DISABLED=1
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
@@ -25,19 +29,26 @@ services:
         max-size: "10m"
         max-file: "3"
 
-  # Optional: Nginx reverse proxy
-  nginx:
-    image: nginx:alpine
-    container_name: nginx-proxy
+  # Webkali Portfolio App
+  webkali:
+    build:
+      context: .
+      dockerfile: ./webkali-portfolio/Dockerfile
+    image: webkali:local
+    container_name: portfolio-webkali
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
-    depends_on:
-      - app
+      - "3003:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_SITE_URL=${WEBKALI_URL:-http://localhost:3003}
+      - NEXT_TELEMETRY_DISABLED=1
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
     networks:
       - app-network
     logging:

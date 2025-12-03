@@ -1,8 +1,7 @@
 {
-  "/tech/page": "app/tech/page.js",
+  "/certifications/page": "app/certifications/page.js",
+  "/experience/page": "app/experience/page.js",
   "/page": "app/page.js",
-  "/blog/page": "app/blog/page.js",
-  "/manifest.webmanifest/route": "app/manifest.webmanifest/route.js",
-  "/tech/circuits/page": "app/tech/circuits/page.js",
-  "/tech/circuits/[slug]/page": "app/tech/circuits/[slug]/page.js"
+  "/tech/page": "app/tech/page.js",
+  "/projects/page": "app/projects/page.js"
 }

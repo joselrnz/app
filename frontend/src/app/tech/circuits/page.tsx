@@ -17,10 +17,10 @@ export default async function CircuitsPage() {
               <Link href="/" className="text-xl font-semibold">Jose Lorenzo</Link>
               <div className="hidden md:flex items-center gap-6 text-sm">
                 <Link href="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
+                <Link href="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
                 <Link href="/experience" className="text-gray-300 hover:text-white transition-colors">Experience</Link>
                 <Link href="/projects" className="text-gray-300 hover:text-white transition-colors">Projects</Link>
                 <Link href="/certifications" className="text-gray-300 hover:text-white transition-colors">Certifications</Link>
-                <Link href="/blog" className="text-gray-300 hover:text-white transition-colors">Blog</Link>
                 <Link href="/tech" className="text-white font-semibold">Tech</Link>
               </div>
             </div>
@@ -39,7 +39,7 @@ export default async function CircuitsPage() {
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white transition-colors text-sm"
               >
-                Live GitHub
+                GitHub
               </a>
             </div>
           </div>
@@ -131,7 +131,7 @@ export default async function CircuitsPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="mailto:jose@joselrnz.com"
+              href="mailto:joselorenzo.rodriguez@outlook.com"
               className="button-border-light group relative flex items-center gap-2 px-8 py-4 rounded-full border transition-all duration-300 bg-white text-black border-white hover:bg-white/90"
             >
               <span className="relative z-10 font-medium">Get in Touch</span>
@@ -152,7 +152,7 @@ export default async function CircuitsPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-gray-400 text-sm">
-              © 2024 Jose Lorenzo. All rights reserved.
+              © 2025 Jose Lorenzo. All rights reserved.
             </div>
 
             <div className="flex items-center gap-6">
@@ -173,7 +173,7 @@ export default async function CircuitsPage() {
                 GitHub
               </a>
               <a
-                href="mailto:jose@joselrnz.com"
+                href="mailto:joselorenzo.rodriguez@outlook.com"
                 className="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 Email

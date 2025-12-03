@@ -1,11 +1,11 @@
 {
-  "name": "jose-cloud-portfolio",
+  "name": "frontend",
   "version": "1.2.0",
   "private": true,
   "description": "Jose's Professional Cloud Engineering Portfolio - Modern CI/CD showcase with interactive pipeline visualization and multi-cloud infrastructure",
   "author": {
-    "name": "Jose Rodriguez",
-    "email": "jose@joselrnz.com",
+    "name": "Jose Lorenzo",
+    "email": "joselorenzo.rodriguez@outlook.com",
     "url": "https://joselrnz.com"
   },
   "keywords": [
@@ -24,9 +24,9 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/joselrnz/portfolio.git"
+    "url": "https://github.com/joselrnz/apps.git"
   },
-  "homepage": "https://joselrnz.com",
+  "homepage": "https://app.joselrnz.com",
   "engines": {
     "node": ">=18.17.0",
     "npm": ">=9.0.0"

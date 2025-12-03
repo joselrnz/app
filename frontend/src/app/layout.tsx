@@ -4,8 +4,8 @@ import ThemeProvider from '@/components/ThemeProvider'
 import { ProgressProvider } from '@/components/ProgressProvider'
 
 export const metadata: Metadata = {
-  title: "Jose's Cloud Engineering Portfolio",
-  description: "Jose's Cloud Engineering Portfolio - Showcasing Multi-Cloud Infrastructure, DevOps, CI/CD Pipelines, and Cloud-Native Solutions",
+  title: "Jose's Cloud Platform Engineering Portfolio",
+  description: "Jose's Cloud Platform Engineering Portfolio - AI Infrastructure, Multi-Cloud Architecture, DevOps, CI/CD Pipelines, and Platform Engineering",
   icons: {
     icon: '/favicon.svg',
   },

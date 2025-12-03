@@ -673,7 +673,7 @@ This project is private and proprietary. All rights reserved.
 ## 👤 Author
 
 **Jose Lorenzo Beltran Rodriguez**
-- Email: jose@joselrnz.com
+- Email: joselorenzo.rodriguez@outlook.com
 - GitHub: [@joselrnz](https://github.com/joselrnz)
 
 ---

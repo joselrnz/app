@@ -266,7 +266,7 @@ export default async function KubernetesArticlePage({ params }: PageProps) {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-gray-400 text-sm">
-              © 2024 Jose Lorenzo. All rights reserved.
+              © 2025 Jose Lorenzo. All rights reserved.
             </div>
 
             <div className="flex items-center gap-6">
@@ -287,7 +287,7 @@ export default async function KubernetesArticlePage({ params }: PageProps) {
                 GitHub
               </a>
               <a
-                href="mailto:jose@joselrnz.com"
+                href="mailto:joselorenzo.rodriguez@outlook.com"
                 className="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 Email

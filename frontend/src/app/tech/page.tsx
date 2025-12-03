@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import '../../styles/resend-animations.css'
 
 export default function TechHubPage() {
@@ -8,6 +9,7 @@ export default function TechHubPage() {
     {
       title: 'Circuits & Electronics',
       icon: '⚡',
+      isImage: false,
       description: 'Arduino, ESP32, Raspberry Pi projects, PCB design, and embedded systems.',
       href: '/tech/circuits',
       topics: ['Arduino', 'ESP32', 'Raspberry Pi', 'PCB Design', 'Sensors', 'IoT Devices'],
@@ -15,7 +17,8 @@ export default function TechHubPage() {
     },
     {
       title: 'Kubernetes & CKA',
-      icon: '☸️',
+      icon: '/images/logos/kubernetes.svg',
+      isImage: true,
       description: 'Kubernetes administration, CKA exam prep, container orchestration, and cloud-native technologies.',
       href: '/tech/kubernetes',
       topics: ['Kubernetes', 'CKA Exam', 'Container Orchestration', 'kubectl', 'Helm', 'Cloud Native'],
@@ -24,6 +27,7 @@ export default function TechHubPage() {
     {
       title: 'Linux & IoT',
       icon: '🐧',
+      isImage: false,
       description: 'Linux system administration, IoT platforms, embedded Linux, and automation.',
       href: '/tech/linux',
       topics: ['Linux Admin', 'IoT Platforms', 'Embedded Linux', 'Shell Scripting', 'Systemd', 'Networking'],
@@ -32,6 +36,7 @@ export default function TechHubPage() {
     {
       title: 'AI & Machine Learning',
       icon: '🤖',
+      isImage: false,
       description: 'TensorFlow, PyTorch, computer vision, neural networks, and AI applications.',
       href: '/tech/ai',
       topics: ['TensorFlow', 'PyTorch', 'Computer Vision', 'Neural Networks', 'NLP', 'Model Training'],
@@ -40,6 +45,7 @@ export default function TechHubPage() {
     {
       title: 'Technical Notes',
       icon: '📝',
+      isImage: false,
       description: 'Quick tips, troubleshooting guides, code snippets, and technical references.',
       href: '/tech/notes',
       topics: ['Quick Tips', 'Troubleshooting', 'Code Snippets', 'Best Practices', 'Resources', 'Cheat Sheets'],
@@ -57,10 +63,10 @@ export default function TechHubPage() {
               <Link href="/" className="text-xl font-semibold">Jose Lorenzo</Link>
               <div className="hidden md:flex items-center gap-6 text-sm">
                 <Link href="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
+                <Link href="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
                 <Link href="/experience" className="text-gray-300 hover:text-white transition-colors">Experience</Link>
                 <Link href="/projects" className="text-gray-300 hover:text-white transition-colors">Projects</Link>
                 <Link href="/certifications" className="text-gray-300 hover:text-white transition-colors">Certifications</Link>
-                <Link href="/blog" className="text-gray-300 hover:text-white transition-colors">Blog</Link>
                 <Link href="/tech" className="text-white font-semibold">Tech</Link>
               </div>
             </div>
@@ -79,7 +85,7 @@ export default function TechHubPage() {
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white transition-colors text-sm"
               >
-                Live GitHub
+                GitHub
               </a>
             </div>
           </div>
@@ -109,9 +115,21 @@ export default function TechHubPage() {
                 className="button-border-light group p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300"
               >
                 <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                
+
                 <div className="relative z-10">
-                  <div className="text-5xl mb-4">{category.icon}</div>
+                  <div className="mb-4 h-20 flex items-center">
+                    {category.isImage ? (
+                      <Image
+                        src={category.icon}
+                        alt={category.title}
+                        width={80}
+                        height={80}
+                        className="w-20 h-20 object-contain"
+                      />
+                    ) : (
+                      <span className="text-5xl">{category.icon}</span>
+                    )}
+                  </div>
                   <h3 className="text-2xl font-semibold mb-3 group-hover:text-emerald-400 transition-colors">
                     {category.title}
                   </h3>
@@ -194,7 +212,7 @@ export default function TechHubPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-gray-400 text-sm">
-              © 2024 Jose Lorenzo. All rights reserved.
+              © 2025 Jose Lorenzo. All rights reserved.
             </div>
 
             <div className="flex items-center gap-6">
@@ -215,7 +233,7 @@ export default function TechHubPage() {
                 GitHub
               </a>
               <a
-                href="mailto:jose@joselrnz.com"
+                href="mailto:joselorenzo.rodriguez@outlook.com"
                 className="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 Email

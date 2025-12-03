@@ -14,10 +14,10 @@ export default function CertificatesPage() {
               <a href="/" className="text-xl font-semibold">Jose Lorenzo</a>
               <div className="hidden md:flex items-center gap-6 text-sm">
                 <a href="/" className="text-gray-300 hover:text-white transition-colors">Home</a>
+                <a href="/about" className="text-gray-300 hover:text-white transition-colors">About</a>
                 <a href="/experience" className="text-gray-300 hover:text-white transition-colors">Experience</a>
                 <a href="/projects" className="text-gray-300 hover:text-white transition-colors">Projects</a>
                 <a href="/certifications" className="text-white font-semibold">Certifications</a>
-                <a href="/blog" className="text-gray-300 hover:text-white transition-colors">Blog</a>
                 <a href="/tech" className="text-gray-300 hover:text-white transition-colors">Tech</a>
               </div>
             </div>
@@ -36,7 +36,7 @@ export default function CertificatesPage() {
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white transition-colors text-sm"
               >
-                Live GitHub
+                GitHub
               </a>
             </div>
           </div>
@@ -61,90 +61,96 @@ export default function CertificatesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {[
               {
-                icon: '☁️',
+                icon: '/images/logos/aws.svg',
                 title: 'AWS Certified Developer',
                 issuer: 'Amazon Web Services',
                 level: 'Associate',
                 date: 'Oct 2025',
-                status: 'Active'
+                isImage: true
               },
               {
-                icon: '🔷',
+                icon: '/images/logos/microsoft-certified-associate-badge.svg',
                 title: 'Azure Administrator',
                 issuer: 'Microsoft',
                 level: 'AZ-104',
-                date: '2024',
-                status: 'Active'
+                date: 'June 2025',
+                isImage: true,
+                link: 'https://learn.microsoft.com/api/credentials/share/en-us/JoseLorenzoRodriguez-8076/820E3FCD080F26B?sharingId=CB6B3A76D8B6EB70'
               },
               {
-                icon: '🔧',
+                icon: '/images/logos/terraform.svg',
                 title: 'HashiCorp Terraform',
                 issuer: 'HashiCorp',
                 level: 'Associate (003)',
                 date: 'Dec 2026',
-                status: 'Active'
+                isImage: true
               },
               {
-                icon: '🐧',
+                icon: '/images/logos/comptia-linux.svg',
                 title: 'CompTIA Linux+',
                 issuer: 'CompTIA',
                 level: 'ce Certification',
                 date: 'Feb 2028',
-                status: 'Active'
+                isImage: true
               },
               {
-                icon: '🖥️',
-                title: 'CompTIA Server+',
-                issuer: 'CompTIA',
-                level: 'Certification',
-                date: 'May 2022',
-                status: 'Active'
-              },
-              {
-                icon: '☸️',
+                icon: '/images/logos/kubernetes.svg',
                 title: 'Kubernetes and Cloud Native',
                 issuer: 'Cloud Native Computing Foundation',
                 level: 'KCNA',
                 date: '2024',
-                status: 'Active'
-              },
-              {
-                icon: '☁️',
-                title: 'AWS Cloud Practitioner',
-                issuer: 'Amazon Web Services',
-                level: 'Foundational',
-                date: 'Aug 2023',
-                status: 'Expired'
+                isImage: true
               }
-            ].map((cert, index) => (
-              <div
-                key={index}
-                className={`button-border-light group p-8 rounded-2xl border transition-all duration-300 ${
-                  cert.status === 'Expired'
-                    ? 'border-white/5 bg-white/[0.02] opacity-60'
-                    : 'border-white/10 bg-white/5 hover:bg-white/10'
-                }`}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="text-4xl">{cert.icon}</div>
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    cert.status === 'Active'
-                      ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
-                      : 'bg-gray-500/20 text-gray-400 border border-gray-500/30'
-                  }`}>
-                    {cert.status}
-                  </span>
+            ].map((cert, index) => {
+              const CardContent = (
+                <>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="h-16 flex items-center">
+                      {cert.isImage ? (
+                        <img src={cert.icon} alt={cert.title} className="h-16 w-auto object-contain" />
+                      ) : (
+                        <span className="text-4xl">{cert.icon}</span>
+                      )}
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">{cert.title}</h3>
+                  <p className="text-gray-400 mb-2">{cert.issuer}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm text-emerald-400">{cert.level}</span>
+                    <span className="text-sm text-gray-500">Expires {cert.date}</span>
+                  </div>
+                  {cert.link && (
+                    <div className="mt-4">
+                      <span className="inline-flex items-center gap-2 text-emerald-400 hover:text-emerald-300 transition-colors text-sm">
+                        <span>View Credential</span>
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </span>
+                    </div>
+                  )}
+                </>
+              );
+
+              return cert.link ? (
+                <a
+                  key={index}
+                  href={cert.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button-border-light group p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300 block"
+                >
+                  {CardContent}
+                </a>
+              ) : (
+                <div
+                  key={index}
+                  className="button-border-light group p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300"
+                >
+                  {CardContent}
                 </div>
-                <h3 className="text-xl font-semibold mb-2">{cert.title}</h3>
-                <p className="text-gray-400 mb-2">{cert.issuer}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-emerald-400">{cert.level}</span>
-                  <span className="text-sm text-gray-500">
-                    {cert.status === 'Expired' ? 'Expired ' : 'Expires '}{cert.date}
-                  </span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* Skills Section */}
@@ -169,22 +175,10 @@ export default function CertificatesPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-b from-gray-950 to-black">
+      {/* Minimal CTA: only Back to Home as requested */}
+      <section className="py-12 bg-gradient-to-b from-gray-950 to-black">
         <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to discuss your project?</h2>
-          <p className="text-xl text-gray-300 mb-12">
-            Let's talk about how I can help with your cloud infrastructure needs.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="mailto:jose@joselrnz.com"
-              className="button-border-light group relative flex items-center gap-2 px-8 py-4 rounded-full border transition-all duration-300 bg-white text-black border-white hover:bg-white/90"
-            >
-              <span className="relative z-10 font-medium">Get in Touch</span>
-            </a>
-
+          <div className="flex items-center justify-center">
             <a
               href="/"
               className="button-border-light group relative flex items-center gap-2 px-8 py-4 rounded-full border transition-all duration-300 bg-transparent text-white border-white/20 hover:border-white/40 hover:bg-white/5"
@@ -200,7 +194,7 @@ export default function CertificatesPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-gray-400 text-sm">
-              © 2024 Jose Lorenzo. All rights reserved.
+              © 2025 Jose Lorenzo. All rights reserved.
             </div>
 
             <div className="flex items-center gap-6">
@@ -221,7 +215,7 @@ export default function CertificatesPage() {
                 GitHub
               </a>
               <a
-                href="mailto:jose@joselrnz.com"
+                href="mailto:joselorenzo.rodriguez@outlook.com"
                 className="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 Email

@@ -31,11 +31,11 @@ export function Footer() {
       { name: 'Frontend', href: 'https://frontend.joselrnz.com' },
       { name: 'Mobile', href: 'https://mobile.joselrnz.com' },
     ],
-    'Connect': [
+      'Connect': [
       { name: 'LinkedIn', href: 'https://linkedin.com/in/joselrnz' },
       { name: 'GitHub', href: 'https://github.com/joselrnz' },
-      { name: 'Twitter', href: 'https://twitter.com/joselrnz' },
-      { name: 'Email', href: 'mailto:jose@joselrnz.com' },
+        { name: 'Twitter', href: 'https://twitter.com/joselrnz' },
+        { name: 'Email', href: 'mailto:joselorenzo.rodriguez@outlook.com' },
     ],
   }
 
@@ -62,7 +62,7 @@ export function Footer() {
                 { icon: '💼', name: 'LinkedIn', url: 'https://linkedin.com/in/joselrnz' },
                 { icon: '🐙', name: 'GitHub', url: 'https://github.com/joselrnz' },
                 { icon: '🐦', name: 'Twitter', url: 'https://twitter.com/joselrnz' },
-                { icon: '📧', name: 'Email', url: 'mailto:jose@joselrnz.com' },
+                { icon: '📧', name: 'Email', url: 'mailto:joselorenzo.rodriguez@outlook.com' },
               ].map((social) => (
                 <motion.a
                   key={social.name}

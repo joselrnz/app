@@ -13,10 +13,10 @@ export default function ProjectsPage() {
               <a href="/" className="text-xl font-semibold">Jose Lorenzo</a>
               <div className="hidden md:flex items-center gap-6 text-sm">
                 <a href="/" className="text-gray-300 hover:text-white transition-colors">Home</a>
+                <a href="/about" className="text-gray-300 hover:text-white transition-colors">About</a>
                 <a href="/experience" className="text-gray-300 hover:text-white transition-colors">Experience</a>
                 <a href="/projects" className="text-white font-semibold">Projects</a>
                 <a href="/certifications" className="text-gray-300 hover:text-white transition-colors">Certifications</a>
-                <a href="/blog" className="text-gray-300 hover:text-white transition-colors">Blog</a>
                 <a href="/tech" className="text-gray-300 hover:text-white transition-colors">Tech</a>
               </div>
             </div>
@@ -35,7 +35,7 @@ export default function ProjectsPage() {
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white transition-colors text-sm"
               >
-                Live GitHub
+                GitHub
               </a>
             </div>
           </div>
@@ -60,49 +60,77 @@ export default function ProjectsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {[
               {
-                title: 'Multi-Cloud Infrastructure Platform',
-                description: 'Built a unified infrastructure platform managing resources across AWS, Azure, and GCP using Terraform and Kubernetes.',
-                tech: ['Terraform', 'Kubernetes', 'AWS', 'Azure', 'GCP'],
-                link: 'https://github.com/joselrnz'
+                title: 'LLM Control Plane for Cloud Ops',
+                description: 'AI-native control plane exposing AWS operations (provisioning, scaling, incident triage) as safe tools for LLMs via MCP. Features JSON-RPC brokering with strict IAM, RBAC, and full audit logging to CloudWatch.',
+                tech: ['Python', 'TypeScript', 'MCP', 'JSON-RPC', 'FastAPI', 'Lambda', 'IAM'],
+                link: 'https://github.com/joselrnz',
+                category: 'AI Infrastructure',
+                status: '🚧 In Development'
               },
               {
-                title: 'CI/CD Pipeline Automation',
-                description: 'Designed and implemented automated CI/CD pipelines reducing deployment time by 60% and improving reliability.',
-                tech: ['Jenkins', 'GitHub Actions', 'Docker', 'ArgoCD'],
-                link: 'https://github.com/joselrnz'
+                title: 'LLM Security Gateway',
+                description: 'Enterprise gateway enforcing DLP, PII redaction, RBAC, rate limiting, and model routing. Ensures no sensitive data leaves approved boundaries with full audit trails and token usage tracking.',
+                tech: ['Python', 'FastAPI', 'Redis', 'OPA/Rego', 'Presidio', 'JWT'],
+                link: 'https://github.com/joselrnz',
+                category: 'AI Security',
+                status: '📋 Planned'
               },
               {
-                title: 'Monitoring & Observability Stack',
-                description: 'Deployed comprehensive monitoring solution with Prometheus, Grafana, and custom dashboards for real-time insights.',
-                tech: ['Prometheus', 'Grafana', 'ELK Stack', 'DataDog'],
-                link: 'https://github.com/joselrnz'
+                title: 'Kubernetes AgentOps Platform',
+                description: 'K8s platform where AI agents run as workloads with MCP servers scoped by namespace. Enforced via NetworkPolicies, PodSecurity, OPA Gatekeeper, and GitOps with ArgoCD.',
+                tech: ['Kubernetes', 'Helm', 'ArgoCD', 'Kustomize', 'OPA Gatekeeper', 'Falco'],
+                link: 'https://github.com/joselrnz',
+                category: 'Kubernetes & AI',
+                status: '📋 Planned'
               },
               {
-                title: 'Infrastructure as Code Framework',
-                description: 'Created reusable IaC modules and templates for rapid infrastructure provisioning across multiple environments.',
-                tech: ['Terraform', 'Ansible', 'CloudFormation', 'Helm'],
-                link: 'https://github.com/joselrnz'
+                title: 'Enterprise CI/CD Framework',
+                description: 'Standardized pipelines with build/test, security scanning (SAST/DAST), container hardening, SBOM generation, and canary/blue-green deployments. Automated rollback on failure.',
+                tech: ['GitHub Actions', 'GitLab CI', 'ArgoCD', 'Trivy', 'SonarQube', 'Cosign'],
+                link: 'https://github.com/joselrnz',
+                category: 'DevOps Automation',
+                status: '📋 Planned'
               },
               {
-                title: 'Kubernetes Cluster Management',
-                description: 'Managed production Kubernetes clusters with auto-scaling, security policies, and disaster recovery strategies.',
-                tech: ['Kubernetes', 'Helm', 'Istio', 'Cert-Manager'],
-                link: 'https://github.com/joselrnz'
+                title: 'Centralized Logging & Threat Analytics',
+                description: 'Unified log aggregation with parsing, enrichment, Sigma rule correlation, and near real-time anomaly detection for security events. Natural language log queries via LLM.',
+                tech: ['OpenSearch', 'ELK', 'Fluent Bit', 'Splunk', 'OTEL', 'Sigma Rules'],
+                link: 'https://github.com/joselrnz',
+                category: 'Security & Logging',
+                status: '📋 Planned'
               },
               {
-                title: 'Data Pipeline Orchestration',
-                description: 'Built scalable data pipelines using Apache Airflow and Spark for processing terabytes of data daily.',
-                tech: ['Apache Airflow', 'Spark', 'Snowflake', 'Python'],
-                link: 'https://github.com/joselrnz'
+                title: 'Multi-Cloud Observability Fabric',
+                description: 'Standardized metrics, logs, traces across AWS/Azure/GCP with OpenTelemetry. SLO dashboards, error budget alerting, trace-based debugging, and cost attribution per service.',
+                tech: ['Prometheus', 'Grafana', 'Loki', 'Tempo', 'OTEL', 'CloudWatch'],
+                link: 'https://github.com/joselrnz',
+                category: 'Observability',
+                status: '📋 Planned'
+              },
+              {
+                title: 'Natural Language Automation Hub',
+                description: 'Voice/chat interface for triggering workflows via natural language. LLM interprets intents, n8n orchestrates jobs with approvals and human-in-the-loop for sensitive operations.',
+                tech: ['n8n', 'Node.js', 'Claude/GPT', 'Whisper', 'Twilio', 'OAuth2'],
+                link: 'https://github.com/joselrnz',
+                category: 'Workflow Automation',
+                status: '📋 Planned'
               }
             ].map((project, index) => (
               <div
                 key={index}
                 className="button-border-light group p-8 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-300"
               >
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-medium">
+                    {project.category}
+                  </span>
+                  <span className="text-xs text-gray-400">
+                    {project.status}
+                  </span>
+                </div>
                 <h3 className="text-2xl font-semibold mb-4">{project.title}</h3>
                 <p className="text-gray-300 mb-6">{project.description}</p>
-                
+
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.tech.map((tech, i) => (
                     <span
@@ -141,7 +169,7 @@ export default function ProjectsPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="mailto:jose@joselrnz.com"
+              href="mailto:joselorenzo.rodriguez@outlook.com"
               className="button-border-light group relative flex items-center gap-2 px-8 py-4 rounded-full border transition-all duration-300 bg-white text-black border-white hover:bg-white/90"
             >
               <span className="relative z-10 font-medium">Get in Touch</span>
@@ -162,7 +190,7 @@ export default function ProjectsPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-gray-400 text-sm">
-              © 2024 Jose Lorenzo. All rights reserved.
+              © 2025 Jose Lorenzo. All rights reserved.
             </div>
 
             <div className="flex items-center gap-6">
@@ -183,7 +211,7 @@ export default function ProjectsPage() {
                 GitHub
               </a>
               <a
-                href="mailto:jose@joselrnz.com"
+                href="mailto:joselorenzo.rodriguez@outlook.com"
                 className="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 Email

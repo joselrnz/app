@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import TechNavigation from '@/components/tech/TechNavigation'
 import { getAllMarkdownFiles } from '@/lib/markdown'
 import '../../../styles/resend-animations.css'
@@ -17,10 +18,10 @@ export default async function KubernetesPage() {
               <Link href="/" className="text-xl font-semibold">Jose Lorenzo</Link>
               <div className="hidden md:flex items-center gap-6 text-sm">
                 <Link href="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
+                <Link href="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
                 <Link href="/experience" className="text-gray-300 hover:text-white transition-colors">Experience</Link>
                 <Link href="/projects" className="text-gray-300 hover:text-white transition-colors">Projects</Link>
                 <Link href="/certifications" className="text-gray-300 hover:text-white transition-colors">Certifications</Link>
-                <Link href="/blog" className="text-gray-300 hover:text-white transition-colors">Blog</Link>
                 <Link href="/tech" className="text-white font-semibold">Tech</Link>
               </div>
             </div>
@@ -39,7 +40,7 @@ export default async function KubernetesPage() {
                 rel="noopener noreferrer"
                 className="text-gray-300 hover:text-white transition-colors text-sm"
               >
-                Live GitHub
+                GitHub
               </a>
             </div>
           </div>
@@ -55,7 +56,15 @@ export default async function KubernetesPage() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-black via-gray-950 to-black pt-20">
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 py-32">
           <div className="text-center mb-16">
-            <div className="text-6xl mb-6">☸️</div>
+            <div className="flex justify-center mb-6">
+              <Image
+                src="/images/logos/kubernetes.svg"
+                alt="Kubernetes"
+                width={96}
+                height={96}
+                className="w-24 h-24"
+              />
+            </div>
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-serif mb-6 leading-tight">
               Kubernetes &
               <br />
@@ -131,7 +140,7 @@ export default async function KubernetesPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="mailto:jose@joselrnz.com"
+              href="mailto:joselorenzo.rodriguez@outlook.com"
               className="button-border-light group relative flex items-center gap-2 px-8 py-4 rounded-full border transition-all duration-300 bg-white text-black border-white hover:bg-white/90"
             >
               <span className="relative z-10 font-medium">Get in Touch</span>
@@ -152,7 +161,7 @@ export default async function KubernetesPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-gray-400 text-sm">
-              © 2024 Jose Lorenzo. All rights reserved.
+              © 2025 Jose Lorenzo. All rights reserved.
             </div>
 
             <div className="flex items-center gap-6">
@@ -173,7 +182,7 @@ export default async function KubernetesPage() {
                 GitHub
               </a>
               <a
-                href="mailto:jose@joselrnz.com"
+                href="mailto:joselorenzo.rodriguez@outlook.com"
                 className="text-gray-400 hover:text-white transition-colors text-sm"
               >
                 Email

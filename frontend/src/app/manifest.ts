@@ -2,9 +2,9 @@ import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Jose's AI & Data Engineering Portfolio",
-    short_name: 'Jose AI Portfolio',
-    description: "Jose's AI & Data Engineering Portfolio - Showcasing Machine Learning, Data Engineering, MLOps, and AI Infrastructure skills",
+    name: "Jose's Cloud Platform Engineering Portfolio",
+    short_name: 'Jose Portfolio',
+    description: "Jose's Cloud Platform Engineering Portfolio - Showcasing AI Infrastructure, Cloud Architecture, DevOps, and Platform Engineering",
     start_url: '/',
     display: 'standalone',
     background_color: '#0d1117',

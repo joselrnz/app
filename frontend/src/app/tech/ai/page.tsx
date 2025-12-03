@@ -16,16 +16,16 @@ export default async function AIPage() {
               <Link href="/" className="text-xl font-semibold">Jose Lorenzo</Link>
               <div className="hidden md:flex items-center gap-6 text-sm">
                 <Link href="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
+                <Link href="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
                 <Link href="/experience" className="text-gray-300 hover:text-white transition-colors">Experience</Link>
                 <Link href="/projects" className="text-gray-300 hover:text-white transition-colors">Projects</Link>
                 <Link href="/certifications" className="text-gray-300 hover:text-white transition-colors">Certifications</Link>
-                <Link href="/blog" className="text-gray-300 hover:text-white transition-colors">Blog</Link>
                 <Link href="/tech" className="text-white font-semibold">Tech</Link>
               </div>
             </div>
             <div className="flex items-center gap-4">
               <a href="https://linkedin.com/in/joselrnz" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors text-sm">LinkedIn</a>
-              <a href="https://github.com/joselrnz" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors text-sm">Live GitHub</a>
+              <a href="https://github.com/joselrnz" target="_blank" rel="noopener noreferrer" className="text-gray-300 hover:text-white transition-colors text-sm">GitHub</a>
             </div>
           </div>
         </div>
@@ -83,7 +83,7 @@ export default async function AIPage() {
           <h2 className="text-4xl md:text-5xl font-bold mb-6">Interested in AI collaboration?</h2>
           <p className="text-xl text-gray-300 mb-12">Let's discuss machine learning and AI projects.</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a href="mailto:jose@joselrnz.com" className="button-border-light group relative flex items-center gap-2 px-8 py-4 rounded-full border transition-all duration-300 bg-white text-black border-white hover:bg-white/90">
+            <a href="mailto:joselorenzo.rodriguez@outlook.com" className="button-border-light group relative flex items-center gap-2 px-8 py-4 rounded-full border transition-all duration-300 bg-white text-black border-white hover:bg-white/90">
               <span className="relative z-10 font-medium">Get in Touch</span>
             </a>
             <Link href="/tech" className="button-border-light group relative flex items-center gap-2 px-8 py-4 rounded-full border transition-all duration-300 bg-transparent text-white border-white/20 hover:border-white/40 hover:bg-white/5">
@@ -96,11 +96,11 @@ export default async function AIPage() {
       <footer className="border-t border-white/10 py-12 bg-black">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="text-gray-400 text-sm">© 2024 Jose Lorenzo. All rights reserved.</div>
+            <div className="text-gray-400 text-sm">© 2025 Jose Lorenzo. All rights reserved.</div>
             <div className="flex items-center gap-6">
               <a href="https://linkedin.com/in/joselrnz" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-sm">LinkedIn</a>
               <a href="https://github.com/joselrnz" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-sm">GitHub</a>
-              <a href="mailto:jose@joselrnz.com" className="text-gray-400 hover:text-white transition-colors text-sm">Email</a>
+              <a href="mailto:joselorenzo.rodriguez@outlook.com" className="text-gray-400 hover:text-white transition-colors text-sm">Email</a>
             </div>
           </div>
         </div>
